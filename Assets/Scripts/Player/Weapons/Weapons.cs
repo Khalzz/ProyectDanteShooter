@@ -19,6 +19,9 @@ public class Weapons : MonoBehaviour
 
     private Vector3 initPosition;
 
+    public GameObject recoilPlace;
+    public int recoilAmount;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +43,7 @@ public class Weapons : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
+            transform.position = new Vector3(recoilPlace.transform.position.x,recoilPlace.transform.position.y, recoilPlace.transform.position.z);
             shoot();
         }
 
