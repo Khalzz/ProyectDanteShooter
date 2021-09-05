@@ -44,7 +44,7 @@ public class BasicEnemy : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
         float dist = Vector3.Distance(transform.position, player.position);
 
-        if (dist <= 3f)
+        if (dist <= 3f && playerInFollowRange)
         {
             agent.isStopped = true;
             timer +=(1 * Time.deltaTime);
@@ -56,8 +56,9 @@ public class BasicEnemy : MonoBehaviour
                 }
             } 
         }
-        else
+        else if (dist > 3f && playerInFollowRange)
         {
+            followRange = 50;
             Following();
             timer = 0;
         }

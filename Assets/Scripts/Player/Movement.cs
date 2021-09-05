@@ -19,12 +19,14 @@ public class Movement : MonoBehaviour
     public Transform crouchPosition; // crouch object
     public Transform posicionPies; //objeto pies
 
-    public float radioPies = 0.4f; //radio de comprobacion pies
+    public float radioPies; //radio de comprobacion pies
 
     public LayerMask Suelo; //layer que represente el suelo
     bool estaEnElSuelo; //esta tocando el suelo?
     float airMult = 0.4f;
     bool itsCrouching;
+
+    Rigidbody rb;
 
     static public bool itsSpeed;
 
@@ -34,6 +36,8 @@ public class Movement : MonoBehaviour
     void Start() 
     {
         speed = 7;
+        radioPies = 0.2f;
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -76,6 +80,7 @@ public class Movement : MonoBehaviour
         if (Input.GetButton("Jump") && estaEnElSuelo || Input.GetButton("Jump") && itsCrouching)
         {
             //calculo que genera el salto
+            rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
             velocidad.y = Mathf.Sqrt(alturaSalto * -2 * gravedad);
         }
 
