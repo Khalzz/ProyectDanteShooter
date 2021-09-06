@@ -4,22 +4,61 @@ using UnityEngine;
 
 public class Shotgun : MonoBehaviour
 {
+    public int shotGunPellets; // 16
 
     public int recoilAmount;
+    public float waitTimer;
     public float recoilTime;
 
-    public ParticleSystem particles;
-    // Start is called before the first frame update
-    void Start()
-    {
+    //public Transform firePoint;
+    private Vector3 destination;
+
+
+    void Start() {
+        recoilAmount = 100;
+        shotGunPellets = 16;
+        waitTimer = 0;
+        recoilTime = 0.6f;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Test()
     {
-        if (Input.GetButtonDown("Fire1"))
+        print("the function is working");
+    }
+
+    public void Shoot(Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab)
+    {
+        for(int i = 0; i < shotGunPellets; i++)
         {
-            particles.Play();
-        }   
+            float randomAngle = Random.Range(-10, 10);
+            Vector3 axis = new Vector3(1,1,0);
+            Quaternion rotation = Quaternion.AngleAxis(randomAngle, axis);
+            RaycastHit hit;
+            bool itsHit = Physics.Raycast(playerCam.transform.position,getShotgunShooting(playerCam), out hit, 1000f, ~playerBody);
+            bool enemyHit = hit.transform.tag == "Enemy";
+            Debug.DrawRay(weaponContainer.position, rotation*transform.forward*100, Color.magenta);
+            
+            if (hit.transform.tag == "World")
+            {
+                Instantiate(bulletPrefab, hit.point, Quaternion.identity);
+            }
+
+            if (enemyHit)
+            {
+                hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 2;
+            }
+        }
+    }
+
+    public Vector3 getShotgunShooting(Camera playerCam)
+    {
+        Vector3 targetPos = playerCam.transform.position + playerCam.transform.forward * 50f;
+        targetPos = new Vector3 (
+            targetPos.x + Random.Range(-10, 10),
+            targetPos.y + Random.Range(-10, 10),
+            targetPos.z + Random.Range(-10, 10)
+        );
+        Vector3 direction = targetPos - playerCam.transform.position;
+        return direction.normalized;
     }
 }

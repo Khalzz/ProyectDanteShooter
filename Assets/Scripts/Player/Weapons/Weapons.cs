@@ -9,6 +9,8 @@ public class Weapons : MonoBehaviour
     public LayerMask playerBody;
     public GameObject player;
 
+    static public Vector3 weaponContainer;
+
     public GameObject bulletPrefab;
     public GameObject floor;
 
@@ -16,7 +18,6 @@ public class Weapons : MonoBehaviour
     public GameObject revolver;
     public GameObject shotgun;
     public GameObject launcher;
-
     public int shotGunPellets;
 
     private GameObject actualGun;
@@ -30,7 +31,6 @@ public class Weapons : MonoBehaviour
 
 
     // gun recoil
-    public GameObject recoilPlace;
     public int recoilAmount;
     private bool canShoot;
     public float waitTimer;
@@ -44,11 +44,14 @@ public class Weapons : MonoBehaviour
     public float smoothAmount;
     private Vector3 initPosition;
 
+    Shotgun shotgunClass;
+    Revolver revolverClass;
+
     void Start()
     {
+        shotgunClass = shotgun.GetComponent<Shotgun>();
+        revolverClass = revolver.GetComponent<Revolver>();
         proyectileSpeed = 50;
-        shotGunPellets = 16;
-        waitTimer = 0;
         canShoot = true;
         actualGun = revolver;
         initPosition = transform.localPosition;
@@ -78,27 +81,24 @@ public class Weapons : MonoBehaviour
         }
         if (Input.GetButtonDown("Gunslot2"))
         {
-            // take out shotgun
-            actualGun = shotgun;
             slot = 2;
         }
         if (Input.GetButtonDown("Gunslot3"))
         {
-            // take out shotgun
             actualGun = launcher;
             slot = 3;
         }
 
         if (slot == 1)
         {
-            recoilAmount = 20;
+            recoilAmount = revolverClass.recoilAmount;
             revolver.SetActive(true);
             shotgun.SetActive(false);
             launcher.SetActive(false);
         }
         else if (slot == 2)
         {
-            recoilAmount = 100;
+            recoilAmount = shotgunClass.recoilAmount;
             revolver.SetActive(false);
             shotgun.SetActive(true);
             launcher.SetActive(false);
@@ -128,18 +128,19 @@ public class Weapons : MonoBehaviour
         {
             if (slot == 1)
             {
-                RevolverShoot();
+                revolverClass.Shoot(playerCam, bulletPrefab);
                 canShoot = false;
-                waitTimer = 0;
-                recoilTime = 0.2f;
+                waitTimer = revolverClass.waitTimer;
+                recoilTime = revolverClass.recoilTime;
             }
             else if (slot == 2)
             {
                 player.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
-                ShotgunShoot();
+                shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
+                shotgunClass.Test();
                 canShoot = false;
-                waitTimer = 0;
-                recoilTime = 0.6f;
+                waitTimer = shotgunClass.waitTimer;
+                recoilTime = shotgunClass.recoilTime;
             }
             /*else if (slot == 3)
             {
@@ -154,47 +155,7 @@ public class Weapons : MonoBehaviour
         // shoot
     }
 
-    void ShotgunShoot()
-    {
-        for(int i = 0; i < shotGunPellets; i++)
-        {
-            float randomAngle = Random.Range(-10, 10);
-            Vector3 axis = new Vector3(1,1,0);
-            Quaternion rotation = Quaternion.AngleAxis(randomAngle, axis);
-            RaycastHit hit;
-            bool itsHit = Physics.Raycast(playerCam.transform.position,getShotgunShooting(), out hit, 1000f, ~playerBody);
-            bool enemyHit = hit.transform.tag == "Enemy";
-            Debug.DrawRay(this.transform.position, rotation*transform.forward*100, Color.magenta);
-            
-            if (hit.transform.tag == "World")
-            {
-                Instantiate(bulletPrefab, hit.point, Quaternion.identity);
-            }
-
-            if (enemyHit)
-            {
-                hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 2;
-            }
-        }
-    }
-
-    void RevolverShoot()
-    {
-        RaycastHit hit;
-        bool itsHit = Physics.Raycast(playerCam.transform.position,playerCam.transform.forward, out hit, 1000f);
-        bool enemyHit = hit.transform.tag == "Enemy";
-
-        if (hit.transform.tag == "World")
-        {
-            Instantiate(bulletPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-        }
-
-        if (enemyHit && slot == 1)
-        {
-            hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 10;
-            print("you have a enemy in front of you");
-        }
-    }
+    
 
     void LauncherShoot()
     {
@@ -213,17 +174,5 @@ public class Weapons : MonoBehaviour
         projectileObj.GetComponent<Rigidbody>().velocity = (destination - firePoint.position).normalized * proyectileSpeed;
         Physics.IgnoreCollision(misileProyectile.GetComponent<Collider>(), player.GetComponent<Collider>());
         //projectileObj.GetComponent<Rigidbody>().AddForce(transform.forward * proyectileSpeed);
-    }
-
-    Vector3 getShotgunShooting()
-    {
-        Vector3 targetPos = playerCam.transform.position + playerCam.transform.forward * 50f;
-        targetPos = new Vector3 (
-            targetPos.x + Random.Range(-10, 10),
-            targetPos.y + Random.Range(-10, 10),
-            targetPos.z + Random.Range(-10, 10)
-        );
-        Vector3 direction = targetPos - playerCam.transform.position;
-        return direction.normalized;
     }
 }

@@ -63,13 +63,19 @@ public class RbMovement : MonoBehaviour
             {
                 itsSpeed = true;
             }
-            GetComponent<CapsuleCollider>().height = 0.1f;
+            GetComponent<CapsuleCollider>().height = 0.5f;
+            GetComponent<CapsuleCollider>().center = new Vector3(0,0.5f,0);
         }
         else if (Input.GetButtonUp("Slide"))
         {
             itsSpeed = false;
             itsMoving = x;
             GetComponent<CapsuleCollider>().height = 2f;
+            GetComponent<CapsuleCollider>().center = new Vector3(0,0,0);
+
+            // i have to do this because the player was clipping into the wall and falling out... fuck u unity
+            this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+
         }
 
         if (isGrounded || itsCrouching)
