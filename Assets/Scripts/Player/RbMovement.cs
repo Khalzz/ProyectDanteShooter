@@ -23,10 +23,13 @@ public class RbMovement : MonoBehaviour
 
     public bool isGrounded;
     public bool itsCrouching;
+    public bool pressingCrouch;
+    
     public bool canJump;
     public int jumpForce;
 
     public float groundDrag = 3f;
+    public float crouchDrag = 3f;
     public float airDrag = 1f;
 
 
@@ -55,6 +58,7 @@ public class RbMovement : MonoBehaviour
 
         if (Input.GetButton("Slide")) 
         {
+            pressingCrouch = true;
             if (itsMoving != 0)
             {
                 itsMoving = x*4;
@@ -68,6 +72,7 @@ public class RbMovement : MonoBehaviour
         }
         else if (Input.GetButtonUp("Slide"))
         {
+            pressingCrouch = false;
             itsSpeed = false;
             itsMoving = x;
             GetComponent<CapsuleCollider>().height = 2f;
@@ -83,7 +88,7 @@ public class RbMovement : MonoBehaviour
             canJump = true;
             rb.drag = groundDrag;
         }
-        else 
+        else
         {
             canJump = false;
             rb.drag = airDrag;
@@ -97,8 +102,6 @@ public class RbMovement : MonoBehaviour
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             canJump = false;
         }
-
-        print(canJump);
     }
 
     private void FixedUpdate() // we move rigidbody here for the physics
@@ -109,14 +112,18 @@ public class RbMovement : MonoBehaviour
             //print(rb.velocity.magnitude);
             rb.AddForce(move.normalized * speed*9.5f, ForceMode.Acceleration);
         }
-        else if (!isGrounded && !itsCrouching)
+        else if (!isGrounded && !itsCrouching && !pressingCrouch)
         {
-            rb.AddForce(move.normalized * speed*10*0.4f, ForceMode.Acceleration);
+            rb.AddForce(move.normalized * speed*12f*0.4f, ForceMode.Acceleration);
+        }
+        else if (!isGrounded && !itsCrouching && pressingCrouch)
+        {
+            rb.AddForce(move.normalized * speed*12f*0.8f, ForceMode.Acceleration);
         }
         else if (itsCrouching && itsSpeed)
         {
             //print(rb.velocity.magnitude);
-            rb.AddForce(move.normalized * (speed*14f), ForceMode.Acceleration);
+            rb.AddForce(move.normalized * (speed*17f), ForceMode.Acceleration);
         }
     }
 }
