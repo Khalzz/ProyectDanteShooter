@@ -19,11 +19,14 @@ public class Misile : MonoBehaviour
 
     void OnCollisionEnter(Collision other) 
     {
-        if (other.gameObject.tag != "Player" && other.gameObject.tag != "Bullet" && other.gameObject.tag != "Bullet" && other.gameObject.tag != "MainCamera" &&  !collided)
+        if (other.gameObject.tag == "Player" && other.gameObject.tag != "Bullet" &&  !collided && other.gameObject.tag != "Enemy")
         {
             collided = true;
+            Stats.playerLife -= 25;
+        }
+        else if (other.gameObject.tag == "World")
+        {
             Destroy(gameObject);
-            print(other.gameObject.tag);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BasicEnemy : MonoBehaviour
+public class BasicEnemyDistance : MonoBehaviour
 {
     public NavMeshAgent agent;
     public Transform player;
@@ -24,13 +24,17 @@ public class BasicEnemy : MonoBehaviour
 
     public bool haveAttacked;
 
-    private void Awake() 
+    public GameObject enemyProyectile;
+    public Transform shootPoint;
+
+    private void Awake()
     {
         haveAttacked = false;
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
+    // Start is called before the first frame update
     void Start()
     {
         life = 10;
@@ -40,26 +44,27 @@ public class BasicEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        transform.LookAt(player);
+
         playerInFollowRange = Physics.CheckSphere(transform.position, followRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
         float dist = Vector3.Distance(transform.position, player.position);
 
-        if (dist <= 3f && playerInFollowRange)
+        if (dist <= 15f)
         {
-            timer +=(1 * Time.deltaTime);
-            if (timer >= 0.5)
+            timer += (1*Time.deltaTime);
+            if (haveAttacked == false && timer >= 2f)
             {
-                if (haveAttacked == false)
-                {
-                    Attacking();
-                }
-            } 
+                Attacking();
+                print("its attacking");
+            }
         }
-        else if (dist > 3f && playerInFollowRange)
+        else if (dist > 15f && dist < 30f)
         {
-            followRange = 50;
             Following();
-            timer = 0;
+            print("its following");
+
         }
 
         if (life <= 0)
@@ -69,17 +74,16 @@ public class BasicEnemy : MonoBehaviour
     }
 
     public void Following()
-    {  
+    {
         agent.SetDestination(player.position);
-        transform.LookAt(player);
     }
 
     public void Attacking()
     {
         agent.SetDestination(gameObject.transform.position);
-        transform.LookAt(player);
         haveAttacked = true;
-        Stats.playerLife -= 20;
+        Rigidbody rb = Instantiate(enemyProyectile, shootPoint.position, Quaternion.identity).GetComponent<Rigidbody>();
+        rb.AddForce(transform.forward * 30f, ForceMode.Impulse);
         haveAttacked = false;
         timer = 0;
     }

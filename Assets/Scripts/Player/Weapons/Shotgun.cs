@@ -21,11 +21,6 @@ public class Shotgun : MonoBehaviour
         recoilTime = 0.6f;
     }
 
-    public void Test()
-    {
-        print("the function is working");
-    }
-
     public void Shoot(Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab)
     {
         for(int i = 0; i < shotGunPellets; i++)
@@ -44,8 +39,15 @@ public class Shotgun : MonoBehaviour
             }
 
             if (enemyHit)
-            {
-                hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 2;
+                {
+                    if (hit.collider.gameObject.GetComponent<BasicEnemy>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 2;
+                }
+                else if (hit.collider.gameObject.GetComponent<BasicEnemyDistance>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<BasicEnemyDistance>().life -= 2;
+                }
             }
         }
     }

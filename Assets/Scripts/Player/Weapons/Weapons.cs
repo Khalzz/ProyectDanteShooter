@@ -75,18 +75,11 @@ public class Weapons : MonoBehaviour
         // gun slots
         if (Input.GetButtonDown("Gunslot1"))
         {
-            // take out revolver
-            actualGun = revolver;
             slot = 1;
         }
         if (Input.GetButtonDown("Gunslot2"))
         {
             slot = 2;
-        }
-        if (Input.GetButtonDown("Gunslot3"))
-        {
-            actualGun = launcher;
-            slot = 3;
         }
 
         if (slot == 1)
@@ -94,21 +87,12 @@ public class Weapons : MonoBehaviour
             recoilAmount = revolverClass.recoilAmount;
             revolver.SetActive(true);
             shotgun.SetActive(false);
-            launcher.SetActive(false);
         }
         else if (slot == 2)
         {
             recoilAmount = shotgunClass.recoilAmount;
             revolver.SetActive(false);
             shotgun.SetActive(true);
-            launcher.SetActive(false);
-        }
-        else if (slot == 3)
-        {
-            recoilAmount = 50;
-            revolver.SetActive(false);
-            shotgun.SetActive(false);
-            launcher.SetActive(true);
         }
         // gun slots
 
@@ -137,42 +121,13 @@ public class Weapons : MonoBehaviour
             {
                 player.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
                 shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
-                shotgunClass.Test();
                 canShoot = false;
                 waitTimer = shotgunClass.waitTimer;
                 recoilTime = shotgunClass.recoilTime;
             }
-            /*else if (slot == 3)
-            {
-                LauncherShoot();
-                canShoot = false;
-                waitTimer = 0;
-                recoilTime = 1f;
-            }*/
             Vector3 recoilPosition = new Vector3(movementX, movementY, -recoilAmount);
             transform.localPosition = Vector3.Lerp(transform.localPosition, recoilPosition + initPosition, Time.deltaTime * 3);
         }
         // shoot
-    }
-
-    
-
-    void LauncherShoot()
-    {
-        Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            destination = hit.point;
-        }
-        else
-        {
-            destination = ray.GetPoint(1000);
-        }
-        var projectileObj = Instantiate(misileProyectile, firePoint.position, Quaternion.identity) as GameObject;
-        projectileObj.GetComponent<Rigidbody>().velocity = (destination - firePoint.position).normalized * proyectileSpeed;
-        Physics.IgnoreCollision(misileProyectile.GetComponent<Collider>(), player.GetComponent<Collider>());
-        //projectileObj.GetComponent<Rigidbody>().AddForce(transform.forward * proyectileSpeed);
     }
 }
