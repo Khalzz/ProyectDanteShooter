@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class RbMovement : MonoBehaviour
 {
-    public Transform posicionPies;
+    public GameObject posicionPies;
     public Transform crouchPosition;
     public Transform playerOrientation;
     public float radioPies; //radio de comprobacion pies
     public LayerMask suelo;
+
+    // surfaces
+    static public bool onLava;
 
     static public float itsMoving;
     static public bool itsSpeed;
@@ -21,13 +24,14 @@ public class RbMovement : MonoBehaviour
     Vector3 move;
     Rigidbody rb;
 
-    public bool isGrounded;
-    public bool itsCrouching;
-    public bool pressingCrouch;
+    static public bool isGrounded;
+    static public bool itsCrouching;
+    static public bool pressingCrouch;
     
     public bool canJump;
     public int jumpForce;
 
+    public float lavaDrag = 6f;
     public float groundDrag = 3f;
     public float crouchDrag = 3f;
     public float airDrag = 1f;
@@ -39,14 +43,13 @@ public class RbMovement : MonoBehaviour
         radioPies = 0.2f;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        
+        onLava = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        isGrounded = Physics.CheckSphere(posicionPies.position, radioPies, suelo);
+        isGrounded = Physics.CheckSphere(posicionPies.transform.position, radioPies, suelo);
         itsCrouching = Physics.CheckSphere(crouchPosition.position, radioPies, suelo);
         Debug.DrawRay(transform.position, -transform.up, Color.magenta);
 
@@ -58,6 +61,8 @@ public class RbMovement : MonoBehaviour
 
         if (Input.GetButton("Slide")) 
         {
+            isGrounded = false;
+            posicionPies.SetActive(false);
             pressingCrouch = true;
             if (itsMoving != 0)
             {
@@ -72,18 +77,18 @@ public class RbMovement : MonoBehaviour
         }
         else if (Input.GetButtonUp("Slide"))
         {
+            posicionPies.SetActive(true);
             pressingCrouch = false;
             itsSpeed = false;
             itsMoving = x;
             GetComponent<CapsuleCollider>().height = 2f;
             GetComponent<CapsuleCollider>().center = new Vector3(0,0,0);
 
-            // i have to do this because the player was clipping into the wall and falling out... fuck u unity
+            // i have to do this because the player was clipping into the floor and falling out... fuck u unity
             this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-
         }
 
-        if (isGrounded || itsCrouching)
+        if (isGrounded || itsCrouching || MaterialInteractions.itsOnLava || MaterialInteractions.itsCrouchedOnLava)
         {
             canJump = true;
             rb.drag = groundDrag;
