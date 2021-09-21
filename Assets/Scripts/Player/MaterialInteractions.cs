@@ -42,11 +42,11 @@ public class MaterialInteractions : MonoBehaviour
 
         if (itsOnLava  || itsCrouchedOnLava) 
         {
-            GetComponent<Rigidbody>().AddForce(transform.up*200f);
+            //GetComponent<Rigidbody>().AddForce(transform.up*200f);
             if (burnt == 1) 
             {
                 burnt += 1;
-                Stats.GettingDamage(30);
+                Stats.GettingDamage(20);
             }
             else if (burnt == 0)
             {
@@ -66,7 +66,6 @@ public class MaterialInteractions : MonoBehaviour
         {
             burnt = 0;
         }
-        
         print(itsCrouchedOnLava);
     }
 }

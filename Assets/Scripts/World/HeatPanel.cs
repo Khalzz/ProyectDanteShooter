@@ -9,6 +9,8 @@ public class HeatPanel : MonoBehaviour
 
     public bool itsOnLava;
 
+    public Vector3 direction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,24 +33,8 @@ public class HeatPanel : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other) {
-        GetComponent<Rigidbody>().AddExplosionForce(10f, transform.position, 5f, 3f);
-        itsOnLava = true;
-        if (canBurn)
-        {
-            Stats.GettingDamage(30);
-            canBurn = false;
-            timer = 0;
-        }
-        if (!canBurn)
-            timer +=(1 * Time.deltaTime);
-            if (timer >= 1) 
-            {
-                canBurn = true;
-            }  
-    }
-
-    private void OnTriggerExit(Collider other) {
-        itsOnLava = false;
+    private void OnCollisionEnter(Collision other) {
+        other.gameObject.GetComponent<Rigidbody>().AddForce(other.transform.up*1000f);
+        print("funciono :0");
     }
 }
