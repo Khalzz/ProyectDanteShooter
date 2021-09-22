@@ -46,7 +46,7 @@ public class MaterialInteractions : MonoBehaviour
             if (burnt == 1) 
             {
                 burnt += 1;
-                Stats.GettingDamage(20);
+                
             }
             else if (burnt == 0)
             {

@@ -31,7 +31,6 @@ public class RbMovement : MonoBehaviour
     public bool canJump;
     public int jumpForce;
 
-    public float lavaDrag = 6f;
     public float groundDrag = 3f;
     public float crouchDrag = 3f;
     public float airDrag = 1f;
@@ -88,7 +87,7 @@ public class RbMovement : MonoBehaviour
             this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         }
 
-        if (isGrounded || itsCrouching || MaterialInteractions.itsOnLava || MaterialInteractions.itsCrouchedOnLava)
+        if (isGrounded || itsCrouching)
         {
             canJump = true;
             rb.drag = groundDrag;

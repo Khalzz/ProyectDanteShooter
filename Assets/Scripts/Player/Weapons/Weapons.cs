@@ -22,6 +22,7 @@ public class Weapons : MonoBehaviour
 
     private GameObject actualGun;
     public int slot;
+    public int latestSlot;
 
     // proyectiles
     public GameObject misileProyectile;
@@ -56,6 +57,7 @@ public class Weapons : MonoBehaviour
         actualGun = revolver;
         initPosition = transform.localPosition;
         slot = 1;
+        latestSlot = 2;
     }
 
     void Update()
