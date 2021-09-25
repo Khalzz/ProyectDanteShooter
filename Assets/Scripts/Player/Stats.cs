@@ -26,7 +26,7 @@ public class Stats : MonoBehaviour
         lifeText.text = (playerLife.ToString() + "%");
         if (playerLife <= 0)
         {
-            SceneManager.LoadScene("TestingScene");
+            SceneManager.LoadScene("TestingLevel");
         }
     }
 

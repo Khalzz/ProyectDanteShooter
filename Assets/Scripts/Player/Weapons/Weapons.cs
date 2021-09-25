@@ -23,6 +23,7 @@ public class Weapons : MonoBehaviour
     private GameObject actualGun;
     public int slot;
     public int latestSlot;
+    public int latestTempSlot;
 
     // proyectiles
     public GameObject misileProyectile;
@@ -58,6 +59,7 @@ public class Weapons : MonoBehaviour
         initPosition = transform.localPosition;
         slot = 1;
         latestSlot = 2;
+        latestTempSlot = 2;
     }
 
     void Update()
@@ -77,11 +79,15 @@ public class Weapons : MonoBehaviour
         // gun slots
         if (Input.GetButtonDown("Gunslot1"))
         {
-            slot = 1;
+            Slot1();
         }
         if (Input.GetButtonDown("Gunslot2"))
         {
-            slot = 2;
+            Slot2();
+        }
+        if (Input.GetButtonDown("Quickchange"))
+        {
+            LatestGun();
         }
 
         if (slot == 1)
@@ -131,5 +137,34 @@ public class Weapons : MonoBehaviour
             transform.localPosition = Vector3.Lerp(transform.localPosition, recoilPosition + initPosition, Time.deltaTime * 3);
         }
         // shoot
+    }
+
+    public void Slot1() 
+    {
+        if (slot != 1)
+        {
+            latestTempSlot = slot;
+            latestSlot = slot;
+
+            slot = 1;
+        }
+    }
+
+    public void Slot2()
+    {
+        if (slot != 2)
+        {
+            latestTempSlot = slot;
+            latestSlot = slot;
+
+            slot = 2;
+        }
+    }
+
+    public void LatestGun()
+    {
+        latestTempSlot = slot;
+        slot = latestSlot;
+        latestSlot = latestTempSlot;
     }
 }
