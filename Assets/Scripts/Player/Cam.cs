@@ -44,7 +44,14 @@ public class Cam : MonoBehaviour
         rotacionX = Mathf.Clamp(rotacionX, -90f, 90f); //rotacion maxima en eje y
 
         //rotacion del objeto en base a "rotacionX"
-        cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, -2*RbMovement.itsMoving);
+        if (WallRuning.itsRunning == true)
+        {
+            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, 2*4*RbMovement.globalX);
+        }
+        else
+        {
+            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, -2*RbMovement.itsMoving);
+        }
         playerOrientation.transform.localRotation = Quaternion.Euler(0, rotacionY, 0);
         playerOrientation.Rotate(Vector3.up * camaraX); //rotacion de jugador en base a camara x
     }
