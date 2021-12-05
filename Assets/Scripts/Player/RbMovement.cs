@@ -17,9 +17,11 @@ public class RbMovement : MonoBehaviour
     static public bool itsSpeed;
 
     public float speed = 10f;
+    public float speedMult = 9.5f;
 
     float x;
     float y;
+    float z;
 
     static public float globalX;
 
@@ -52,12 +54,13 @@ public class RbMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        rb.velocity = new Vector3(rb.velocity.x,rb.velocity.y,rb.velocity.z);
         isGrounded = Physics.CheckSphere(posicionPies.transform.position, radioPies, suelo);
         itsCrouching = Physics.CheckSphere(crouchPosition.position, radioPies, suelo);
         Debug.DrawRay(transform.position, -transform.up, Color.magenta);
 
-        float x = Input.GetAxis("Horizontal"); //input horizontal (teclado y joystick)
-        float z = Input.GetAxis("Vertical"); //input vertical (teclado y joystick)
+        x = Input.GetAxis("Horizontal"); //input horizontal (teclado y joystick)
+        z = Input.GetAxis("Vertical"); //input vertical (teclado y joystick)
 
         globalX = x;
 
@@ -66,7 +69,7 @@ public class RbMovement : MonoBehaviour
             itsMoving = x;
         }
 
-        move = playerOrientation.right * x + playerOrientation.forward * z; // creamos el movimiento
+                
 
         if (Input.GetButton("Slide")) 
         {
@@ -112,33 +115,53 @@ public class RbMovement : MonoBehaviour
         {
             //calculo que genera el salto
             //velocidad.y = Mathf.Sqrt(alturaSalto * -2 * gravedad);
-            jumpsLeft-=1;
-            rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            jumpsLeft-=1;
             canJump = false;
         }
-    }
 
-    private void FixedUpdate() // we move rigidbody here for the physics
-    {
-        
         if (isGrounded)
         {
             //print(rb.velocity.magnitude);
-            rb.AddForce(move.normalized * speed*9.5f, ForceMode.Acceleration);
+            speedMult = 9.5f;
         }
         else if (!isGrounded && !itsCrouching && !pressingCrouch)
         {
-            rb.AddForce(move.normalized * speed*12f*0.4f, ForceMode.Acceleration);
+            speedMult = 12f*0.4f;
         }
         else if (!isGrounded && !itsCrouching && pressingCrouch)
         {
-            rb.AddForce(move.normalized * speed*12f*0.8f, ForceMode.Acceleration);
+            speedMult = 12f*0.8f;
         }
         else if (itsCrouching && itsSpeed)
         {
             //print(rb.velocity.magnitude);
-            rb.AddForce(move.normalized * (speed*17f), ForceMode.Acceleration);
+            speedMult = 17f;
         }
     }
+
+    private void FixedUpdate() // we move rigidbody here for the physics
+    {   
+        move = ((playerOrientation.right * x   + playerOrientation.forward * z).normalized) * speed * speedMult + new Vector3(0, rb.velocity.y,0); // creamos el movimiento
+        /*
+        Warning:
+            everytime we work on "phisics movement" we have to set the x,y and z axis, if we dont, when our character falls we are gonna get a limited fall speed (in my case 68kmh)
+            so what we have to do its set our Vector3 and give it the x,y and z axis.
+
+            also when we appplly the mult to the movement we have to do this only ein the x and z axis, if we do this on the y axis the player is gonna keep jumping 
+            untill the player touch the ceilling
+        */
+        MoveAddForce();
+    }
+
+    private void MoveVelocity()
+    {
+        rb.velocity = move;
+    }
+
+    private void MoveAddForce() {
+        rb.AddForce(move, ForceMode.Acceleration);
+    }
+
 }

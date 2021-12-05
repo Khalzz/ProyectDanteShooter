@@ -38,15 +38,22 @@ public class Shotgun : MonoBehaviour
                 Instantiate(bulletPrefab, hit.point, Quaternion.identity);
             }
 
-            if (enemyHit)
-                {
-                    if (hit.collider.gameObject.GetComponent<BasicEnemy>() != null)
+
+            // here you add the class of every new enemy
+            if (enemyHit) 
+            {
+                if (hit.collider.gameObject.GetComponent<BasicEnemy>() != null)
                 {
                     hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 2;
                 }
                 else if (hit.collider.gameObject.GetComponent<BasicEnemyDistance>() != null)
                 {
                     hit.collider.gameObject.GetComponent<BasicEnemyDistance>().life -= 2;
+                }
+                else if (hit.collider.gameObject.GetComponent<TestingRangeEnemy>() != null)
+                {
+                    hit.collider.gameObject.GetComponent<TestingRangeEnemy>().life -= 2;
+
                 }
             }
         }

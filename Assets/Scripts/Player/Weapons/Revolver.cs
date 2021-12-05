@@ -34,6 +34,11 @@ public class Revolver : MonoBehaviour
             {
                 hit.collider.gameObject.GetComponent<BasicEnemyDistance>().life -= 10;
             }
+            else if (hit.collider.gameObject.GetComponent<TestingRangeEnemy>() != null)
+            {
+                hit.collider.gameObject.GetComponent<TestingRangeEnemy>().life -= 10;
+
+            }
         }
     }
 }

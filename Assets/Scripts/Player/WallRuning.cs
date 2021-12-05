@@ -10,6 +10,14 @@ public class WallRuning : MonoBehaviour
     public float minJumpDistance = 1;
     static public bool leftWall = false;
     static public bool rightWall = false;
+    static public bool frontWall = false;
+    static public bool backWall = false;
+
+    static public bool canFrontWallJump;
+    RaycastHit frontWallHit;
+
+    static public bool canBackWallJump;
+    RaycastHit backWallHit;
 
     static public bool canLeftWallJump;
     RaycastHit leftWallHit;
@@ -43,6 +51,9 @@ public class WallRuning : MonoBehaviour
     {
         leftWall = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallDistance, world);
         rightWall = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallDistance, world);
+        frontWall = Physics.Raycast(transform.position, orientation.forward, out frontWallHit, wallDistance, world);
+        backWall = Physics.Raycast(transform.position, -orientation.forward, out backWallHit, wallDistance, world);
+        
     }
 
     // Update is called once per frame
@@ -51,16 +62,10 @@ public class WallRuning : MonoBehaviour
         CheckWall();
         if (CanWallRun())
         {
-            if (leftWall) 
+            if (leftWall || rightWall || frontWall || backWall) 
             {
                 RbMovement.jumpsLeft = 1;
                 StartWallRun();
-            }
-            else if (rightWall)
-            {
-                RbMovement.jumpsLeft = 1;
-                StartWallRun();
-
             }
             else 
             {
@@ -83,7 +88,6 @@ public class WallRuning : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             print("saltaste");
-
             if (leftWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal*5;
@@ -93,6 +97,18 @@ public class WallRuning : MonoBehaviour
             else if (rightWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal*5;
+                rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+            }
+            else if (frontWall)
+            {
+                Vector3 wallRunJumpDirection = transform.up + frontWallHit.normal*5;
+                rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+            }
+            else if (backWall)
+            {
+                Vector3 wallRunJumpDirection = transform.up + backWallHit.normal*5;
                 rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
                 rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
             }
