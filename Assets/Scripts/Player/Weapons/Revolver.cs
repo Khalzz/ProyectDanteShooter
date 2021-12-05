@@ -14,10 +14,10 @@ public class Revolver : MonoBehaviour
         recoilAmount = 20;
     }
 
-    public void Shoot(Camera playerCam, GameObject bulletPrefab)
+    public void Shoot(Camera playerCam, GameObject bulletPrefab, LayerMask playerBody)
     {
         RaycastHit hit;
-        bool itsHit = Physics.Raycast(playerCam.transform.position,playerCam.transform.forward, out hit, 1000f);
+        bool itsHit = Physics.Raycast(playerCam.transform.position,playerCam.transform.forward, out hit, 1000f, ~playerBody);
         bool enemyHit = hit.transform.tag == "Enemy";
 
         if (hit.transform.tag == "World")

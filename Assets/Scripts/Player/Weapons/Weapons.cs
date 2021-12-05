@@ -120,7 +120,7 @@ public class Weapons : MonoBehaviour
         {
             if (slot == 1)
             {
-                revolverClass.Shoot(playerCam, bulletPrefab);
+                revolverClass.Shoot(playerCam, bulletPrefab, playerBody);
                 canShoot = false;
                 waitTimer = revolverClass.waitTimer;
                 recoilTime = revolverClass.recoilTime;
