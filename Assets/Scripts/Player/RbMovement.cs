@@ -32,7 +32,7 @@ public class RbMovement : MonoBehaviour
     static public bool itsCrouching;
     static public bool pressingCrouch;
     
-    public bool canJump;
+    static public bool canJump;
     public int jumpForce;
 
     public float groundDrag = 3f;
@@ -111,13 +111,13 @@ public class RbMovement : MonoBehaviour
             rb.drag = airDrag;
         }
 
-        if (Input.GetButtonDown("Jump") && canJump || Input.GetButtonDown("Jump") && jumpsLeft >= 1)
+        if (Input.GetButtonDown("Jump") && canJump || Input.GetButtonDown("Jump") && jumpsLeft == 1)
         {
             //calculo que genera el salto
             //velocidad.y = Mathf.Sqrt(alturaSalto * -2 * gravedad);
             rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-            jumpsLeft-=1;
+            jumpsLeft -= 1;
             canJump = false;
         }
 
