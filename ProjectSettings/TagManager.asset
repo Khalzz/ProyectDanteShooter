@@ -8,6 +8,7 @@ TagManager:
   - World
   - Bullet
   - TestingEnemy
+  - FinishButton
   layers:
   - Default
   - TransparentFX
