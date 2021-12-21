@@ -1,3 +1,9 @@
+/* 
+to do: 
+    1. Limitate the "weapons" based on what do you get from the floor
+    2. Create the "low range attack"
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

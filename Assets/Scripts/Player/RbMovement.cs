@@ -101,14 +101,15 @@ public class RbMovement : MonoBehaviour
 
         if (isGrounded || itsCrouching)
         {
+            jumpsLeft = 1;
             canJump = true;
             rb.drag = groundDrag;
-            jumpsLeft = 1;
         }
-        else
+        else if (!isGrounded && !itsCrouching)
         {
             canJump = false;
             rb.drag = airDrag;
+            jumpsLeft -=1;
         }
 
         if (Input.GetButtonDown("Jump") && canJump || Input.GetButtonDown("Jump") && jumpsLeft == 1)
@@ -143,13 +144,13 @@ public class RbMovement : MonoBehaviour
 
     private void FixedUpdate() // we move rigidbody here for the physics
     {   
-        move = ((playerOrientation.right * x   + playerOrientation.forward * z).normalized) * speed * speedMult + new Vector3(0, rb.velocity.y,0); // creamos el movimiento
+        move = ((playerOrientation.right * x   + playerOrientation.forward * z).normalized) * speed * speedMult + new Vector3(0, rb.velocity.y,0);
         /*
         Warning:
-            everytime we work on "phisics movement" we have to set the x,y and z axis, if we dont, when our character falls we are gonna get a limited fall speed (in my case 68kmh)
+            everytime we work on "physics movement" we have to set the x,y and z axis, if we dont, when our character falls we are gonna get a limited fall speed (in my case 68kmh)
             so what we have to do its set our Vector3 and give it the x,y and z axis.
 
-            also when we appplly the mult to the movement we have to do this only ein the x and z axis, if we do this on the y axis the player is gonna keep jumping 
+            also when we appplly the mult to the movement we have to do this only in the x and z axis, if we do this on the y axis the player is gonna keep jumping 
             untill the player touch the ceilling
         */
         MoveAddForce();

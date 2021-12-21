@@ -65,7 +65,15 @@ public class WallRuning : MonoBehaviour
             if (leftWall || rightWall || frontWall || backWall) 
             {
                 RbMovement.jumpsLeft = 1;
+                RbMovement.canJump = true;
                 StartWallRun();
+            }
+            else if (!leftWall && !rightWall && !frontWall && !backWall)
+            {
+                RbMovement.jumpsLeft -= 1;
+                RbMovement.canJump = false;
+                itsRunning = false;
+                StopWallRun();
             }
             else 
             {
@@ -85,9 +93,12 @@ public class WallRuning : MonoBehaviour
         itsRunning = true;
         rb.useGravity = false;
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && RbMovement.canJump || Input.GetButtonDown("Jump") && RbMovement.jumpsLeft == 1)
         {
             print("saltaste");
+            rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
+            rb.AddForce(transform.up * 20, ForceMode.Impulse);
+
             if (leftWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal*5;
