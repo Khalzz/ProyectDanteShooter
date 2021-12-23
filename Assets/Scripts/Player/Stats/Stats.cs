@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Stats : MonoBehaviour
 {
-    static public int playerLife;
+    public int playerLife;
     public TextMeshPro lifeText;
     public TextMeshPro SpeedText;
 
@@ -30,7 +30,7 @@ public class Stats : MonoBehaviour
         }
     }
 
-    static public void GettingDamage(int damage)
+    public void GettingDamage(int damage)
     {
         playerLife -= damage;
         print(playerLife);

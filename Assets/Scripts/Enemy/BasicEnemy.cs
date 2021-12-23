@@ -6,7 +6,9 @@ using UnityEngine.AI;
 public class BasicEnemy : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
+    public GameObject player;
+    public Transform playerTransform;
+    public Stats playerStats;
     public LayerMask floorLayer, playerLayer;
 
     public float followRange;
@@ -27,7 +29,9 @@ public class BasicEnemy : MonoBehaviour
     private void Awake() 
     {
         haveAttacked = false;
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player");
+        playerTransform = player.transform;
+        playerStats = player.GetComponent<Stats>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -42,7 +46,7 @@ public class BasicEnemy : MonoBehaviour
     {
         playerInFollowRange = Physics.CheckSphere(transform.position, followRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
-        float dist = Vector3.Distance(transform.position, player.position);
+        float dist = Vector3.Distance(transform.position, playerTransform.position);
 
         if (dist <= 3f && playerInFollowRange)
         {
@@ -70,16 +74,16 @@ public class BasicEnemy : MonoBehaviour
 
     public void Following()
     {  
-        agent.SetDestination(player.position);
-        transform.LookAt(player);
+        agent.SetDestination(playerTransform.position);
+        transform.LookAt(playerTransform);
     }
 
     public void Attacking()
     {
         agent.SetDestination(gameObject.transform.position);
-        transform.LookAt(player);
+        transform.LookAt(playerTransform);
         haveAttacked = true;
-        Stats.playerLife -= 20;
+        playerStats.playerLife -= 20;
         haveAttacked = false;
         timer = 0;
     }

@@ -18,12 +18,10 @@ public class Weapons : MonoBehaviour
     static public Vector3 weaponContainer;
 
     public GameObject bulletPrefab;
-    public GameObject floor;
 
     // guns
     public GameObject revolver;
     public GameObject shotgun;
-    public GameObject launcher;
     public int shotGunPellets;
 
     private GameObject actualGun;
@@ -31,8 +29,11 @@ public class Weapons : MonoBehaviour
     public int latestSlot;
     public int latestTempSlot;
 
+    public int equipedWeapons;
+    public bool haveRevolver;
+    public bool haveShotgun;
+
     // proyectiles
-    public GameObject misileProyectile;
     public Transform firePoint;
     private Vector3 destination;
     public float proyectileSpeed;
@@ -66,6 +67,10 @@ public class Weapons : MonoBehaviour
         slot = 1;
         latestSlot = 2;
         latestTempSlot = 2;
+
+        haveRevolver = false;
+        haveShotgun = false;
+        equipedWeapons = 0;
     }
 
     void Update()
@@ -82,6 +87,24 @@ public class Weapons : MonoBehaviour
         ui.transform.localPosition = Vector3.Lerp(ui.transform.localPosition, finalPosition + initPosition, Time.deltaTime * smoothAmount);
         // gun movement by mouse
 
+        if (haveRevolver)
+        {
+            revolver.SetActive(true);
+        }
+        else 
+        {
+            revolver.SetActive(false);
+        }
+
+        if (haveShotgun)
+        {
+            shotgun.SetActive(true);
+        }
+        else 
+        {
+            shotgun.SetActive(false);
+        }
+
         // gun slots
         if (Input.GetButtonDown("Gunslot1"))
         {
@@ -91,18 +114,18 @@ public class Weapons : MonoBehaviour
         {
             Slot2();
         }
-        if (Input.GetButtonDown("Quickchange"))
+        if (Input.GetButtonDown("Quickchange") && equipedWeapons >= 2)
         {
             LatestGun();
         }
 
-        if (slot == 1)
+        if (slot == 1 && haveRevolver)
         {
             recoilAmount = revolverClass.recoilAmount;
             revolver.SetActive(true);
             shotgun.SetActive(false);
         }
-        else if (slot == 2)
+        else if (slot == 2 && haveShotgun)
         {
             recoilAmount = shotgunClass.recoilAmount;
             revolver.SetActive(false);
@@ -124,14 +147,14 @@ public class Weapons : MonoBehaviour
         // shoot
         if (Input.GetButtonDown("Fire1") && canShoot)
         {
-            if (slot == 1)
+            if (slot == 1 && haveRevolver)
             {
                 revolverClass.Shoot(playerCam, bulletPrefab, playerBody);
                 canShoot = false;
                 waitTimer = revolverClass.waitTimer;
                 recoilTime = revolverClass.recoilTime;
             }
-            else if (slot == 2)
+            else if (slot == 2 && haveShotgun)
             {
                 player.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
                 shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
