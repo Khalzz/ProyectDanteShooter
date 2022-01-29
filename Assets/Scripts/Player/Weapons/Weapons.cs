@@ -156,7 +156,7 @@ public class Weapons : MonoBehaviour
             }
             else if (slot == 2 && haveShotgun)
             {
-                player.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
+                player.transform.parent.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
                 shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
                 canShoot = false;
                 waitTimer = shotgunClass.waitTimer;

@@ -15,7 +15,7 @@ public class Stats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponent<Rigidbody>();
+        player = transform.parent.GetComponent<Rigidbody>();
         playerLife = 100;
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WallRuning : MonoBehaviour
 {
+    RbMovement player;
     public Transform orientation;
 
     public float wallDistance = 0.5f;
@@ -39,7 +40,7 @@ public class WallRuning : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = transform.parent.GetComponent<Rigidbody>();
     }
 
     public bool CanWallRun()
@@ -59,19 +60,20 @@ public class WallRuning : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        player = transform.parent.GetComponent<RbMovement>();
         CheckWall();
         if (CanWallRun())
         {
             if (leftWall || rightWall || frontWall || backWall) 
             {
-                RbMovement.jumpsLeft = 1;
-                RbMovement.canJump = true;
+                player.jumpsLeft = 1;
+                player.canJump = true;
                 StartWallRun();
             }
             else if (!leftWall && !rightWall && !frontWall && !backWall)
             {
-                RbMovement.jumpsLeft -= 1;
-                RbMovement.canJump = false;
+                player.jumpsLeft -= 1;
+                player.canJump = false;
                 itsRunning = false;
                 StopWallRun();
             }
@@ -93,35 +95,35 @@ public class WallRuning : MonoBehaviour
         itsRunning = true;
         rb.useGravity = false;
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
-        if (Input.GetButtonDown("Jump") && RbMovement.canJump || Input.GetButtonDown("Jump") && RbMovement.jumpsLeft == 1)
+        if (Input.GetButtonDown("Jump") && player.canJump || Input.GetButtonDown("Jump") && player.jumpsLeft == 1)
         {
             print("saltaste");
             rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
-            rb.AddForce(transform.up * 20, ForceMode.Impulse);
+            rb.AddForce(transform.up * 100, ForceMode.Impulse);
 
             if (leftWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + leftWallHit.normal*5;
                 rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 500, ForceMode.Force);
             }
             else if (rightWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + rightWallHit.normal*5;
                 rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 500, ForceMode.Force);
             }
             else if (frontWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + frontWallHit.normal*5;
                 rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 500, ForceMode.Force);
             }
             else if (backWall)
             {
                 Vector3 wallRunJumpDirection = transform.up + backWallHit.normal*5;
                 rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z);
-                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 100, ForceMode.Force);
+                rb.AddForce(wallRunJumpDirection * wallRunJumpForce * 500, ForceMode.Force);
             }
         }
     }

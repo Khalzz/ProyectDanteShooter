@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MaterialInteractions : MonoBehaviour
 {
+    RbMovement player;
+
     public GameObject footPosition;
     public Transform crouchPosition;
     public float footRadio;
@@ -30,12 +32,13 @@ public class MaterialInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        player = transform.parent.GetComponent<RbMovement>();
         itsOnLava = Physics.CheckSphere(footPosition.transform.position, footRadio, lava);
         itsCrouchedOnLava = Physics.CheckSphere(crouchPosition.position, footRadio, lava);
 
         print(itsCrouchedOnLava); 
 
-        if (RbMovement.pressingCrouch) 
+        if (player.pressingCrouch) 
         {
             itsOnLava = false;
         } 

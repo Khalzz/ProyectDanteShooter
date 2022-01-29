@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TutorialLevels/MovementTutorial.unity
     guid: 9512c2502eed64347a8fa63a03c4f71e
+  - enabled: 1
+    path: Assets/Scenes/Sb_test.unity
+    guid: 62ed28320763bf54385b46982d30dc77
   m_configObjects: {}

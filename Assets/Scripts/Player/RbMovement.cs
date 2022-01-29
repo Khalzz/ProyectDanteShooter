@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class RbMovement : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class RbMovement : MonoBehaviour
     // surfaces
     static public bool onLava;
 
-    static public float itsMoving;
-    static public bool itsSpeed;
+    public float itsMoving;
+    public bool itsSpeed;
 
     public float speed = 10f;
     public float speedMult = 9.5f;
@@ -23,24 +24,30 @@ public class RbMovement : MonoBehaviour
     float y;
     float z;
 
-    static public float globalX;
+    public float globalX;
 
     Vector3 move;
     Rigidbody rb;
 
-    static public bool isGrounded;
-    static public bool itsCrouching;
-    static public bool pressingCrouch;
-    
-    static public bool canJump;
+    public bool isGrounded;
+    public bool itsCrouching;
+    public bool pressingCrouch;
+
+    public bool canJump;
     public int jumpForce;
 
     public float groundDrag = 3f;
     public float crouchDrag = 3f;
     public float airDrag = 1f;
 
-    static public int jumpsLeft;
+    public int jumpsLeft;
 
+    [SerializeField]
+    private NetworkVariable<Vector3> finalPosition = new NetworkVariable<Vector3>();
+
+
+    // client catching
+    private Vector3 oldPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -51,10 +58,11 @@ public class RbMovement : MonoBehaviour
         onLava = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        rb.velocity = new Vector3(rb.velocity.x,rb.velocity.y,rb.velocity.z);
+        Vector3 position = transform.position;
+
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
         isGrounded = Physics.CheckSphere(posicionPies.transform.position, radioPies, suelo);
         itsCrouching = Physics.CheckSphere(crouchPosition.position, radioPies, suelo);
         Debug.DrawRay(transform.position, -transform.up, Color.magenta);
@@ -64,36 +72,35 @@ public class RbMovement : MonoBehaviour
 
         globalX = x;
 
+
         if (!WallRuning.rightWall && !WallRuning.leftWall)
         {
             itsMoving = x;
         }
 
-                
-
-        if (Input.GetButton("Slide")) 
+        if (Input.GetButton("Slide"))
         {
             isGrounded = false;
             posicionPies.SetActive(false);
             pressingCrouch = true;
             if (itsMoving != 0 && !WallRuning.rightWall && !WallRuning.leftWall)
             {
-                itsMoving = x*4;
+                itsMoving = x * 4;
             }
             if (x != 0 || z != 0)
             {
                 itsSpeed = true;
             }
-            GetComponent<CapsuleCollider>().height = 0.5f;
-            GetComponent<CapsuleCollider>().center = new Vector3(0,0.5f,0);
+            transform.GetChild(1).GetComponent<CapsuleCollider>().height = 0.5f;
+            transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0.5f, 0);
         }
         else if (Input.GetButtonUp("Slide"))
         {
             posicionPies.SetActive(true);
             pressingCrouch = false;
             itsSpeed = false;
-            GetComponent<CapsuleCollider>().height = 2f;
-            GetComponent<CapsuleCollider>().center = new Vector3(0,0,0);
+            transform.GetChild(1).GetComponent<CapsuleCollider>().height = 2f;
+            transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
 
             // i have to do this because the player was clipping into the floor and falling out... fuck u unity
             this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
@@ -109,14 +116,14 @@ public class RbMovement : MonoBehaviour
         {
             canJump = false;
             rb.drag = airDrag;
-            jumpsLeft -=1;
+            jumpsLeft -= 1;
         }
 
         if (Input.GetButtonDown("Jump") && canJump || Input.GetButtonDown("Jump") && jumpsLeft == 1)
         {
             //calculo que genera el salto
             //velocidad.y = Mathf.Sqrt(alturaSalto * -2 * gravedad);
-            rb.velocity = new Vector3(rb.velocity.x,0,rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // if we dont have this, sometimes the player will jump a little bit
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             jumpsLeft -= 1;
             canJump = false;
@@ -129,11 +136,11 @@ public class RbMovement : MonoBehaviour
         }
         else if (!isGrounded && !itsCrouching && !pressingCrouch)
         {
-            speedMult = 12f*0.4f;
+            speedMult = 12f * 0.4f;
         }
         else if (!isGrounded && !itsCrouching && pressingCrouch)
         {
-            speedMult = 12f*0.8f;
+            speedMult = 12f * 0.8f;
         }
         else if (itsCrouching && itsSpeed)
         {
@@ -142,9 +149,10 @@ public class RbMovement : MonoBehaviour
         }
     }
 
+
     private void FixedUpdate() // we move rigidbody here for the physics
-    {   
-        move = ((playerOrientation.right * x   + playerOrientation.forward * z).normalized) * speed * speedMult + new Vector3(0, rb.velocity.y,0);
+    {
+        move = ((playerOrientation.right * x + playerOrientation.forward * z).normalized) * speed * speedMult + new Vector3(0, rb.velocity.y, 0);
         /*
         Warning:
             everytime we work on "physics movement" we have to set the x,y and z axis, if we dont, when our character falls we are gonna get a limited fall speed (in my case 68kmh)
@@ -164,5 +172,4 @@ public class RbMovement : MonoBehaviour
     private void MoveAddForce() {
         rb.AddForce(move, ForceMode.Acceleration);
     }
-
 }

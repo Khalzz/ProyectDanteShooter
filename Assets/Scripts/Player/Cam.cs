@@ -6,6 +6,8 @@ public class Cam : MonoBehaviour
 {
     [SerializeField] Transform cam;
 
+    RbMovement player;
+
     public float sensibilidadMouse; //sensibilidad basica de camara
     public Transform cuerpoJugador; //objeto del jugador
     public Transform playerOrientation; //objeto del jugador
@@ -24,9 +26,11 @@ public class Cam : MonoBehaviour
 
     void Update()
     {
+        player = transform.parent.parent.gameObject.GetComponent<RbMovement>();
+
         Debug.DrawRay(cam.transform.position, cam.transform.forward*100f, Color.magenta);
 
-        if (RbMovement.itsSpeed)
+        if (player.itsSpeed)
         {
             cam.gameObject.GetComponent<Camera>().fieldOfView = camFov + 20;
         } 
@@ -46,11 +50,11 @@ public class Cam : MonoBehaviour
         //rotacion del objeto en base a "rotacionX"
         if (WallRuning.itsRunning == true)
         {
-            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, 2*4*RbMovement.globalX);
+            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, 2*4*player.globalX);
         }
         else
         {
-            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, -2*RbMovement.itsMoving);
+            cam.transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, -2*player.itsMoving);
         }
         playerOrientation.transform.localRotation = Quaternion.Euler(0, rotacionY, 0);
         playerOrientation.Rotate(Vector3.up * camaraX); //rotacion de jugador en base a camara x
