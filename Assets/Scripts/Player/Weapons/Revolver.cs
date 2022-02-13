@@ -24,7 +24,7 @@ public class Revolver : MonoBehaviour
         {
             Instantiate(bulletPrefab, hit.point, Quaternion.LookRotation(hit.normal));
         }
-        if (enemyHit)
+        else if (enemyHit)
         {
             if (hit.collider.gameObject.GetComponent<BasicEnemy>() != null)
             {
@@ -40,5 +40,10 @@ public class Revolver : MonoBehaviour
 
             }
         }
+        else
+        {
+            print("Youve pounched nothing");
+        }
+
     }
 }

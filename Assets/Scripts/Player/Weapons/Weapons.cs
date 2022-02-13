@@ -1,6 +1,5 @@
 /* 
 to do: 
-    1. Limitate the "weapons" based on what do you get from the floor
     2. Create the "low range attack"
 */
 
@@ -20,6 +19,7 @@ public class Weapons : MonoBehaviour
     public GameObject bulletPrefab;
 
     // guns
+    public GameObject arm;
     public GameObject revolver;
     public GameObject shotgun;
     public int shotGunPellets;
@@ -52,25 +52,29 @@ public class Weapons : MonoBehaviour
     public float maxAmount;
     public float smoothAmount;
     private Vector3 initPosition;
+    private Quaternion initRotation;
 
     Shotgun shotgunClass;
     Revolver revolverClass;
+    Melee meleeClass;
 
     void Start()
     {
         shotgunClass = shotgun.GetComponent<Shotgun>();
         revolverClass = revolver.GetComponent<Revolver>();
+        meleeClass = arm.GetComponent<Melee>();
         proyectileSpeed = 50;
         canShoot = true;
         actualGun = revolver;
         initPosition = transform.localPosition;
-        slot = 1;
+        initRotation = transform.localRotation;
+        slot = 0;
         latestSlot = 2;
         latestTempSlot = 2;
 
         haveRevolver = false;
         haveShotgun = false;
-        equipedWeapons = 0;
+        equipedWeapons = 1;
     }
 
     void Update()
@@ -107,29 +111,38 @@ public class Weapons : MonoBehaviour
 
         // gun slots
         if (Input.GetButtonDown("Gunslot1"))
-        {
             Slot1();
-        }
         if (Input.GetButtonDown("Gunslot2"))
-        {
             Slot2();
-        }
+        if (Input.GetButtonDown("Melee"))
+            SlotMelee();
         if (Input.GetButtonDown("Quickchange") && equipedWeapons >= 2)
-        {
             LatestGun();
-        }
 
         if (slot == 1 && haveRevolver)
         {
             recoilAmount = revolverClass.recoilAmount;
+            arm.SetActive(false);
             revolver.SetActive(true);
             shotgun.SetActive(false);
+            
         }
         else if (slot == 2 && haveShotgun)
         {
             recoilAmount = shotgunClass.recoilAmount;
+            arm.SetActive(false);
             revolver.SetActive(false);
             shotgun.SetActive(true);
+            
+        }
+        else if (slot == 0)
+        {
+            recoilAmount = meleeClass.recoilAmount;
+            arm.SetActive(true);
+            revolver.SetActive(false);
+            shotgun.SetActive(false);
+            recoilAmount *= -1;
+            
         }
         // gun slots
 
@@ -139,6 +152,10 @@ public class Weapons : MonoBehaviour
         {
             if (waitTimer > recoilTime)
             {
+                if (waitTimer > recoilTime/2)
+                {
+                    meleeClass.collider.enabled = false;
+                }
                 canShoot = true;
             }
         }
@@ -147,23 +164,37 @@ public class Weapons : MonoBehaviour
         // shoot
         if (Input.GetButtonDown("Fire1") && canShoot)
         {
+            
             if (slot == 1 && haveRevolver)
             {
-                revolverClass.Shoot(playerCam, bulletPrefab, playerBody);
-                canShoot = false;
                 waitTimer = revolverClass.waitTimer;
                 recoilTime = revolverClass.recoilTime;
+                Recoil(movementX, movementY);
+                canShoot = false;
+                revolverClass.Shoot(playerCam, bulletPrefab, playerBody);
+
             }
             else if (slot == 2 && haveShotgun)
             {
-                player.transform.parent.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
-                shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
-                canShoot = false;
                 waitTimer = shotgunClass.waitTimer;
                 recoilTime = shotgunClass.recoilTime;
+                Recoil(movementX, movementY);
+                player.transform.parent.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
+                canShoot = false;
+                shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
+
             }
-            Vector3 recoilPosition = new Vector3(movementX, movementY, -recoilAmount);
-            transform.localPosition = Vector3.Lerp(transform.localPosition, recoilPosition + initPosition, Time.deltaTime * 3);
+            else if (slot == 0)
+            {
+                recoilTime = meleeClass.recoilTime;
+                waitTimer = meleeClass.waitTimer;
+                PunchRecoil(movementX, movementY);
+                meleeClass.collider.enabled = true;
+                canShoot = false;
+                meleeClass.Punch(playerCam, bulletPrefab, playerBody);
+
+            }
+            
         }
         // shoot
     }
@@ -177,6 +208,7 @@ public class Weapons : MonoBehaviour
 
             slot = 1;
         }
+        
     }
 
     public void Slot2()
@@ -190,10 +222,36 @@ public class Weapons : MonoBehaviour
         }
     }
 
+    public void SlotMelee()
+    {
+        if (slot != 0)
+        {
+            latestTempSlot = slot;
+            latestSlot = slot;
+
+            slot = 0;
+        }
+    }
+
     public void LatestGun()
     {
         latestTempSlot = slot;
         slot = latestSlot;
         latestSlot = latestTempSlot;
+    }
+
+    private void Recoil(float movementX, float movementY)
+    {
+        Vector3 recoilPosition = new Vector3(movementX, movementY, -recoilAmount);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, recoilPosition + initPosition, Time.deltaTime * 3);
+    }
+
+    private void PunchRecoil(float movementX, float movementY)
+    {
+        Vector3 recoilPosition = new Vector3(movementX, movementY, -recoilAmount);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, recoilPosition + initPosition, Time.deltaTime * 3);
+
+        Quaternion lateralMovement = new Quaternion(transform.localRotation.x, transform.localRotation.y + 90, transform.localRotation.z, transform.localRotation.w);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0,24,0), Time.deltaTime * 3);
     }
 }

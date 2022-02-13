@@ -5,6 +5,8 @@ using UnityEngine;
 public class Cam : MonoBehaviour
 {
     [SerializeField] Transform cam;
+    [SerializeField] Transform gunCam;
+
 
     RbMovement player;
 
@@ -58,6 +60,9 @@ public class Cam : MonoBehaviour
         }
         playerOrientation.transform.localRotation = Quaternion.Euler(0, rotacionY, 0);
         playerOrientation.Rotate(Vector3.up * camaraX); //rotacion de jugador en base a camara x
+
+        gunCam.transform.localRotation = Quaternion.Euler(0, rotacionY, 0);
+        gunCam.Rotate(Vector3.up * camaraX); //rotacion de jugador en base a camara x
     }
 
     

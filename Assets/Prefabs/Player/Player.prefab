@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 7528960507692831750}
+  gunCam: {fileID: 7528960508826734281}
   sensibilidadMouse: 100
   cuerpoJugador: {fileID: 7528960509075859245}
   playerOrientation: {fileID: 7528960509324866883}
@@ -315,6 +316,7 @@ MonoBehaviour:
     m_Bits: 512
   player: {fileID: 7528960509075859244}
   bulletPrefab: {fileID: 6626296283372674237, guid: 4f8529cfa93a4a449887a8a2194afe35, type: 3}
+  arm: {fileID: 0}
   revolver: {fileID: 7259050948372985738}
   shotgun: {fileID: 7259050947905725358}
   shotGunPellets: 0
