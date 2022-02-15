@@ -10,6 +10,8 @@ TagManager:
   - TestingEnemy
   - FinishButton
   - Spawner
+  - Rooms
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
