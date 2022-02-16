@@ -191,10 +191,7 @@ public class Weapons : MonoBehaviour
                 PunchRecoil(movementX, movementY);
                 meleeClass.collider.enabled = true;
                 canShoot = false;
-                meleeClass.Punch(playerCam, bulletPrefab, playerBody);
-
             }
-            
         }
         // shoot
     }

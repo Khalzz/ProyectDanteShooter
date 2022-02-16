@@ -18,37 +18,6 @@ public class Melee : MonoBehaviour
         recoilAmount = 50;
     }
 
-    public void Punch(Camera playerCam, GameObject bulletPrefab, LayerMask playerBody)
-    {
-        RaycastHit hit;
-        RaycastHit lHit;
-
-        bool itsHit = Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, 0f); //, ~playerBody); // 1.5f
-        bool largeHit = Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out lHit, 1000f);
-
-        bool worldHit = hit.transform.tag == "World";
-        bool enemyHit = hit.transform.tag == "Enemy";
-        if (hit.transform.tag == "World")
-        {
-            Instantiate(bulletPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-        }
-        if (enemyHit)
-        { 
-            if (hit.collider.gameObject.GetComponent<BasicEnemy>() != null)
-            {
-                hit.collider.gameObject.GetComponent<BasicEnemy>().life -= 50;
-            }
-            else if (hit.collider.gameObject.GetComponent<BasicEnemyDistance>() != null)
-            {
-                hit.collider.gameObject.GetComponent<BasicEnemyDistance>().life -= 50;
-            }
-            else if (hit.collider.gameObject.GetComponent<TestingRangeEnemy>() != null)
-            {
-                hit.collider.gameObject.GetComponent<TestingRangeEnemy>().life -= 50;
-            }
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "Enemy")
