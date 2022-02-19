@@ -29,7 +29,7 @@ public class BasicEnemy : MonoBehaviour
     private void Awake() 
     {
         haveAttacked = false;
-        player = GameObject.Find("Player");
+        player = GameObject.Find("Player(Clone)");
         playerTransform = player.transform;
         playerStats = player.GetComponent<Stats>();
         agent = GetComponent<NavMeshAgent>();
@@ -51,7 +51,7 @@ public class BasicEnemy : MonoBehaviour
         if (dist <= 3f && playerInFollowRange)
         {
             timer +=(1 * Time.deltaTime);
-            if (timer >= 0.5)
+            if (timer >= 0.3)
             {
                 if (haveAttacked == false)
                 {

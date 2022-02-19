@@ -29,8 +29,8 @@ public class BasicEnemyDistance : MonoBehaviour
 
     private void Awake()
     {
+        player = GameObject.Find("Player(Clone)").transform;
         haveAttacked = false;
-        player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -46,7 +46,6 @@ public class BasicEnemyDistance : MonoBehaviour
     {
 
         transform.LookAt(player);
-
         playerInFollowRange = Physics.CheckSphere(transform.position, followRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
         float dist = Vector3.Distance(transform.position, player.position);
@@ -54,7 +53,7 @@ public class BasicEnemyDistance : MonoBehaviour
         if (dist <= 15f)
         {
             timer += (1*Time.deltaTime);
-            if (haveAttacked == false && timer >= 2f)
+            if (haveAttacked == false && timer >= 1f)
             {
                 Attacking();
                 print("its attacking");

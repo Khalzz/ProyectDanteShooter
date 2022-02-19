@@ -15,7 +15,7 @@ public class Stats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = transform.parent.GetComponent<Rigidbody>();
+        player = transform.GetComponent<Rigidbody>();
         playerLife = 100;
     }
 
@@ -26,7 +26,7 @@ public class Stats : MonoBehaviour
         lifeText.text = (playerLife.ToString() + "%");
         if (playerLife <= 0)
         {
-            SceneManager.LoadScene("MovementTutorial");
+            SceneManager.LoadScene(GameObject.Find("Player(Clone)").GetComponent<Restart>().sceneName);
         }
     }
 

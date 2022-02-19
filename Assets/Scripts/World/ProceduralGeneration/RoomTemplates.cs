@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoomTemplates : MonoBehaviour
 {
+
 	public GameObject[] bottomRooms;
 	public GameObject[] topRooms;
 	public GameObject[] leftRooms;
@@ -17,9 +19,24 @@ public class RoomTemplates : MonoBehaviour
 	private bool spawnedBoss;
 	public GameObject boss;
 
-	void Update()
-	{
-		if (waitTime <= 0 && spawnedBoss == false)
+	public float waitOtherRoom;
+	public GeneratingLevel loader;
+
+	private void Start()
+    {
+		loader = GameObject.Find("Spawner").GetComponent<GeneratingLevel>();
+	}
+
+    void Update()
+    {
+        waitOtherRoom += Time.deltaTime;
+
+		if (waitOtherRoom >= 0.8f)
+        {
+			loader.LoadLevel();
+        }
+
+        if (waitTime <= 0 && spawnedBoss == false)
 		{
 			for (int i = 0; i < rooms.Count; i++)
 			{
