@@ -12,6 +12,8 @@ public class OpenDoors : MonoBehaviour
     private int createNavMesh = 0;
 
     [SerializeField] GameObject doors;
+    public List<GameObject> rooms;
+
 
     public GeneratingLevel loader;
 
@@ -23,15 +25,16 @@ public class OpenDoors : MonoBehaviour
         doors.SetActive(false);
         templates = GameObject.Find("RoomTemplates").GetComponent<RoomTemplates>();
         loader = GameObject.Find("Spawner").GetComponent<GeneratingLevel>();
-        surface = GameObject.Find("Floor").GetComponent<NavMeshSurface>();
+        //surface = GameObject.Find("Floor").GetComponent<NavMeshSurface>();
     }
 
     void Update()
     {
+        rooms = templates.rooms;
         if (loader.isLoaded && createNavMesh == 0)
         {
-            surface.BuildNavMesh();
-            createNavMesh += 1;    
+            templates.rooms[0].transform.GetChild(0).GetComponent<NavMeshSurface>().BuildNavMesh();
+            createNavMesh += 1;
             doors.SetActive(true);
         }
         if (openDoors == 0 && loader.counter >= 3f)

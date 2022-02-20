@@ -1578,10 +1578,10 @@ GameObject:
   - component: {fileID: 7293978197297791151}
   - component: {fileID: 7293978197297791136}
   - component: {fileID: 7293978197297791143}
-  - component: {fileID: 7293978197297791147}
   - component: {fileID: 7293978197297791146}
   - component: {fileID: 7293978197297791145}
   - component: {fileID: 7293978197297791144}
+  - component: {fileID: 2207768149156723093}
   m_Layer: 9
   m_Name: PlayerModel
   m_TagString: Player
@@ -1660,20 +1660,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7293978197297791147
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7293978197297791150}
-  m_Material: {fileID: 13400000, guid: 3f081abf876a6f147b3df763c94f33f8, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7293978197297791146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1728,6 +1714,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98e17b4d78988b48b7cc214cc7f729a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &2207768149156723093
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293978197297791150}
+  m_Material: {fileID: 13400000, guid: 3f081abf876a6f147b3df763c94f33f8, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7293978197312761535
 GameObject:
   m_ObjectHideFlags: 0

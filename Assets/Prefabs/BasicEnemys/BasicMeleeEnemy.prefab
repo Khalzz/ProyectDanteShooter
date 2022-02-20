@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6266160834907217689}
   - component: {fileID: 6266160834907217688}
   - component: {fileID: 6266160834907217669}
-  - component: {fileID: 6266160834907217666}
   - component: {fileID: 6266160834272539950}
-  m_Layer: 0
+  - component: {fileID: -7876742974939238969}
+  m_Layer: 8
   m_Name: BasicMeleeEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8722fd8ebbf0f43b694ce85831a0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 6266160834907217666}
+  agent: {fileID: 0}
   player: {fileID: 0}
   playerTransform: {fileID: 0}
   playerStats: {fileID: 0}
@@ -133,7 +133,23 @@ MonoBehaviour:
   timer: 0
   fixedTimer: 0
   haveAttacked: 0
---- !u!195 &6266160834907217666
+--- !u!54 &6266160834272539950
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6266160834907217691}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!195 &-7876742974939238969
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,22 +171,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &6266160834272539950
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6266160834907217691}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!1 &6266160834965381351
 GameObject:
   m_ObjectHideFlags: 0

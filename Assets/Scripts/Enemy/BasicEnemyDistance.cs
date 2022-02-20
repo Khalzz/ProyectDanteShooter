@@ -29,7 +29,6 @@ public class BasicEnemyDistance : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player(Clone)").transform;
         haveAttacked = false;
         agent = GetComponent<NavMeshAgent>();
     }
@@ -44,7 +43,7 @@ public class BasicEnemyDistance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        player = GameObject.Find("Player(Clone)").transform;
         transform.LookAt(player);
         playerInFollowRange = Physics.CheckSphere(transform.position, followRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);

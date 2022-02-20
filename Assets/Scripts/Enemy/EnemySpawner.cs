@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
 {
     private bool canSpawn;
     private bool haveSpawned = false;
+    private bool enemySpawned = false;
     [SerializeField] GameObject[] enemys;
 
     public GeneratingLevel loader;
@@ -18,10 +19,11 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (canSpawn && !haveSpawned && loader.counter >= 2f)
+        if (canSpawn && !haveSpawned && !enemySpawned)
         {
             Instantiate(enemys[Random.Range(0, enemys.Length)], transform.position, transform.rotation);
             haveSpawned = true;
+            enemySpawned = true;
         }
     }
 

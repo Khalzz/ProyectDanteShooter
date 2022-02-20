@@ -36,7 +36,6 @@ public class GeneratingLevel : MonoBehaviour
         if (isLoaded && Input.GetButtonDown("Fire1") && !isSpawned)
         {
             startLevel();
-            callEnemys();
         }
 
         if (startCounter == true)
@@ -59,10 +58,5 @@ public class GeneratingLevel : MonoBehaviour
         loadingCamera.SetActive(false);
         Instantiate(player, transform.position, transform.rotation);
         startCounter = true;
-    }
-
-    private void callEnemys()
-    {
-        //Instantiate(Enemy[0], transform.position + new Vector3(0,-5,0), transform.rotation);
     }
 }

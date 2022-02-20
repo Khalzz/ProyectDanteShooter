@@ -42,7 +42,7 @@ public class RoomTemplates : MonoBehaviour
 			{
 				if (i == rooms.Count - 1)
 				{
-					Instantiate(boss, rooms[i].transform.position + new Vector3(0,-6,0), Quaternion.identity);
+					Instantiate(boss, rooms[i].transform.position + new Vector3(0,-8,0), Quaternion.identity);
 					spawnedBoss = true;
 				}
 			}

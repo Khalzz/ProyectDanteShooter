@@ -60,7 +60,6 @@ public class RoomSpawner : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        print("i found a SpawnPoint");
         if (other.CompareTag("SpawnPoint"))
         {
 
