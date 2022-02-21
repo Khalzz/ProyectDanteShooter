@@ -7,6 +7,12 @@ public class RbMovement : MonoBehaviour
 {
     public GameObject posicionPies;
     public Transform crouchPosition;
+
+    public Transform headPosition;
+    public LayerMask player;
+
+    public int crouchCounter;
+
     public Transform playerOrientation;
     public float radioPies; //radio de comprobacion pies
     public LayerMask suelo;
@@ -28,6 +34,9 @@ public class RbMovement : MonoBehaviour
 
     Vector3 move;
     Rigidbody rb;
+
+    public bool isTouchingWithHead;
+
 
     public bool isGrounded;
     public bool itsCrouching;
@@ -60,11 +69,17 @@ public class RbMovement : MonoBehaviour
 
     private void Update()
     {
+        RaycastHit ceilingHit;
+        bool itsHit = Physics.Raycast(transform.position + new Vector3(0,0.5f,0), transform.up, out ceilingHit, 0.5f, ~player);
+
+        print("its hit:" + itsHit);
+
         Vector3 position = transform.position;
 
         rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
         isGrounded = Physics.CheckSphere(posicionPies.transform.position, radioPies, suelo);
         itsCrouching = Physics.CheckSphere(crouchPosition.position, radioPies, suelo);
+
         Debug.DrawRay(transform.position, -transform.up, Color.magenta);
 
         x = Input.GetAxis("Horizontal"); //input horizontal (teclado y joystick)
@@ -83,27 +98,23 @@ public class RbMovement : MonoBehaviour
             isGrounded = false;
             posicionPies.SetActive(false);
             pressingCrouch = true;
-            if (itsMoving != 0 && !WallRuning.rightWall && !WallRuning.leftWall)
-            {
-                itsMoving = x * 4;
-            }
-            if (x != 0 || z != 0)
-            {
-                itsSpeed = true;
-            }
-            transform.GetChild(1).GetComponent<CapsuleCollider>().height = 0.5f;
-            transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0.5f, 0);
+            Crouch();
+            crouchCounter = 0;
         }
-        else if (Input.GetButtonUp("Slide"))
+        else if (!Input.GetButton("Slide"))
         {
-            posicionPies.SetActive(true);
-            pressingCrouch = false;
-            itsSpeed = false;
-            transform.GetChild(1).GetComponent<CapsuleCollider>().height = 2f;
-            transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
+            if (!itsHit && crouchCounter == 0) // add a counter that turn this on only one time
+            {
+                crouchCounter = 1;
+                posicionPies.SetActive(true);
+                pressingCrouch = false;
+                itsSpeed = false;
+                transform.GetChild(1).GetComponent<CapsuleCollider>().height = 2f;
+                transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
 
-            // i have to do this because the player was clipping into the floor and falling out... fuck u unity
-            this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+                // i have to do this because the player was clipping into the floor and falling out... fuck u unity
+                this.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            }
         }
 
         if (isGrounded || itsCrouching)
@@ -171,5 +182,19 @@ public class RbMovement : MonoBehaviour
 
     private void MoveAddForce() {
         rb.AddForce(move, ForceMode.Acceleration);
+    }
+
+    private void Crouch()
+    {
+        if (itsMoving != 0 && !WallRuning.rightWall && !WallRuning.leftWall)
+        {
+            itsMoving = x * 4;
+        }
+        if (x != 0 || z != 0)
+        {
+            itsSpeed = true;
+        }
+        transform.GetChild(1).GetComponent<CapsuleCollider>().height = 0.5f;
+        transform.GetChild(1).GetComponent<CapsuleCollider>().center = new Vector3(0, 0.5f, 0);
     }
 }
