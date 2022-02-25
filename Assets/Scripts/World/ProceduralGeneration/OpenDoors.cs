@@ -33,7 +33,7 @@ public class OpenDoors : MonoBehaviour
         rooms = templates.rooms;
         if (loader.isLoaded && createNavMesh == 0)
         {
-            templates.rooms[0].transform.GetChild(0).GetComponent<NavMeshSurface>().BuildNavMesh();
+            //templates.rooms[0].transform.GetChild(0).GetComponent<NavMeshSurface>().BuildNavMesh();
             createNavMesh += 1;
             doors.SetActive(true);
         }

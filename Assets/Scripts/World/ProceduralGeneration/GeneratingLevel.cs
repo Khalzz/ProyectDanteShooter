@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 public class GeneratingLevel : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class GeneratingLevel : MonoBehaviour
         if (isLoaded && Input.GetButtonDown("Fire1") && !isSpawned)
         {
             startLevel();
+            templates.rooms[0].transform.GetChild(0).GetComponent<NavMeshSurface>().BuildNavMesh();
         }
 
         if (startCounter == true)

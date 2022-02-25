@@ -31,7 +31,7 @@ public class RoomTemplates : MonoBehaviour
     {
         waitOtherRoom += Time.deltaTime;
 
-		if (waitOtherRoom >= 0.8f)
+		if (waitOtherRoom >= 1.5f)
         {
 			loader.LoadLevel();
         }

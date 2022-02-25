@@ -179,7 +179,7 @@ public class Weapons : MonoBehaviour
                 waitTimer = shotgunClass.waitTimer;
                 recoilTime = shotgunClass.recoilTime;
                 Recoil(movementX, movementY);
-                player.transform.parent.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 1000);
+                player.transform.parent.GetComponent<Rigidbody>().AddRelativeForce(-playerCam.transform.forward * 5000);
                 canShoot = false;
                 shotgunClass.Shoot(transform, playerBody, playerCam, bulletPrefab); //Transform weaponContainer, LayerMask playerBody, Camera playerCam, GameObject bulletPrefab
 
