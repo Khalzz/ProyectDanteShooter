@@ -48,6 +48,38 @@ MonoBehaviour:
   - {fileID: 6266160834907217691, guid: 6ad553f0e48c72c4cb3e383bcb00aee6, type: 3}
   - {fileID: 8057683547785980614, guid: e9ad2f9045e1ca94db4942a75510e9eb, type: 3}
   loader: {fileID: 0}
+--- !u!1 &1346600865671382374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3112823425710505597}
+  m_Layer: 0
+  m_Name: Destructors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3112823425710505597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346600865671382374}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.957304, y: 1.0791817, z: -12.9599285}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5952186095831334644}
+  m_Father: {fileID: 4743958313909620073}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2392361107365313487
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +158,7 @@ Transform:
   m_Children:
   - {fileID: 7902717716468656655}
   - {fileID: 6265294412207039648}
-  - {fileID: 5952186095831334644}
+  - {fileID: 3112823425710505597}
   m_Father: {fileID: 497131191107135669}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1043,12 +1075,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7210931675181231106}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.957304, y: -1.0791817, z: 12.9599285}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4743958313909620073}
-  m_RootOrder: 2
+  m_Father: {fileID: 3112823425710505597}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &711763953973141755
 Rigidbody:
