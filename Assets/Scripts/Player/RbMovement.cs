@@ -71,12 +71,14 @@ public class RbMovement : MonoBehaviour
     {
         RaycastHit ceilingHit;
         bool itsHit = Physics.Raycast(transform.position + new Vector3(0,0.5f,0), transform.up, out ceilingHit, 0.5f, ~player);
+        Vector3 TargetPosition; // stairs handling
 
         print("its hit:" + itsHit);
 
         Vector3 position = transform.position;
 
         rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
+
         isGrounded = Physics.CheckSphere(posicionPies.transform.position, radioPies, suelo);
         itsCrouching = Physics.CheckSphere(crouchPosition.position, radioPies, suelo);
 
@@ -124,7 +126,7 @@ public class RbMovement : MonoBehaviour
             rb.drag = groundDrag;
         }
         else if (!isGrounded && !itsCrouching)
-        {
+        {   
             canJump = false;
             rb.drag = airDrag;
             jumpsLeft -= 1;

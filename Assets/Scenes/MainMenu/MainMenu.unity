@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.41042295, g: 0.4346926, b: 0.44337144, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1593,7 +1593,7 @@ GameObject:
   - component: {fileID: 1129699787}
   - component: {fileID: 1129699786}
   m_Layer: 5
-  m_Name: Testing Procedural Generation
+  m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2420,7 +2420,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Sb_Test
+  m_text: 'Gym
 
 '
   m_isRightToLeft: 0
@@ -3441,7 +3441,7 @@ GameObject:
   - component: {fileID: 2106434113}
   - component: {fileID: 2106434112}
   m_Layer: 5
-  m_Name: Testing level
+  m_Name: Gym
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3521,7 +3521,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Sb_test
+          m_StringArgument: Gym
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2106434113
