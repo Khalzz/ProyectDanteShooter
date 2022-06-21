@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class OnHand : MonoBehaviour
 {
-    public GameObject hand;
+    public GameObject pickable;
 
-    // Update is called once per frame
+    private void Start()
+    {
+        pickable.transform.position = this.transform.position;
+
+    }
+
     void Update()
     {
-        transform.parent = hand.transform;
+        pickable.transform.SetParent(this.transform);
     }
 }

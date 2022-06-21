@@ -12,6 +12,7 @@ TagManager:
   - Spawner
   - Rooms
   - SpawnPoint
+  - Pickable
   layers:
   - Default
   - TransparentFX
