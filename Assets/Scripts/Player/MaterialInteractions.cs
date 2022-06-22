@@ -36,8 +36,6 @@ public class MaterialInteractions : MonoBehaviour
         itsOnLava = Physics.CheckSphere(footPosition.transform.position, footRadio, lava);
         itsCrouchedOnLava = Physics.CheckSphere(crouchPosition.position, footRadio, lava);
 
-        print(itsCrouchedOnLava); 
-
         if (player.pressingCrouch) 
         {
             itsOnLava = false;
@@ -69,6 +67,5 @@ public class MaterialInteractions : MonoBehaviour
         {
             burnt = 0;
         }
-        print(itsCrouchedOnLava);
     }
 }
